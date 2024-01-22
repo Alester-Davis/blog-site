@@ -1,5 +1,6 @@
 const sendErrorDev = (err,res)=>{
-    res.status(err.statusCode).json({
+    console.log("send",err)
+    res.status(err.statusCode|| 404).json({
         status: err.status,
         error: err,
         message: err.message,

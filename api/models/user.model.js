@@ -19,6 +19,10 @@ const user = new mongoose.Schema({
     passwordConform:{
         type:String,
         required: [true, 'Please provide a conform password']
+    },
+    profilePicture:{
+        type:String,
+        default:"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
     }
 },{timestamps:true})
 
@@ -27,6 +31,10 @@ user.pre("save",async function(next){
     this.passwordConform = undefined
     next()
 })
+
+user.methods.correctPassword = async function(candidatePass,userPass){
+    return await bcryptjs.compareSync(userPass,candidatePass)
+}
 const User = new mongoose.model("User",user)
 
 export default User
