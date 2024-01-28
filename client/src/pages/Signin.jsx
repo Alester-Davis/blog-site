@@ -1,14 +1,19 @@
 import { Link ,useNavigate } from "react-router-dom"
 import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { signInFailure,signInStart,signInSuccess } from "../redux/user/userSlice"
 import { useDispatch, useSelector } from "react-redux"
 import GoogleButton from "../components/GoogleButton"
 export default function Signin() {
   const [formData,setFormData] = useState({})
-  const {loading,error} = useSelector(state=>state.user)
+  const {currentUser,loading,error} = useSelector(state=>state.user)
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  useEffect(()=>{
+    if(currentUser!=null){
+      navigate("/")
+    }
+  })
   const changeHandler = (e)=>{
     setFormData((prev)=>{
       return {...prev,[e.target.id] : e.target.value}

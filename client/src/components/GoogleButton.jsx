@@ -15,6 +15,7 @@ export default function GoogleButton() {
         google.setCustomParameters({prompt : "select_account"})
         try{
             const resultFromGoogle = await signInWithPopup(auth,google)
+            console.log(resultFromGoogle)
             const res = await fetch("/api/auth/google",{
                 method:"POST",
                 headers: {"Content-Type" : "application/json"},
