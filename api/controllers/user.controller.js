@@ -8,7 +8,8 @@ export const updateUser = catchAsync(async(req,res,next)=>{
     }
     if(req.body.username){
         console.log(req.body.username.length)
-        if(req.body.username.length <7 && req.body.username.length > 20){
+        if(req.body.username.length <7 || req.body.username.length > 20){
+            console.log("hello")
             return next(new AppError("Username should have length between 7 and 20",404))
         }
         if(req.body.username.includes(' ')){
@@ -28,5 +29,50 @@ export const updateUser = catchAsync(async(req,res,next)=>{
             email:req.body.user
         }
     },{new:true})
-    console.log(updatedUser)
+    const {password,...rest} = updatedUser
+    res.status(200).json(rest)
+})
+
+export const deleteUser = async(req,res,next)=>{
+    const id = req.params.userId
+    const result = await User.findByIdAndDelete(id)
+    if (!result) {
+        return res.status(404).json({ error: "User not found" });
+    }
+    res.status(200).json({message : "Deleted successfully"})
+}
+
+export const getUsers = catchAsync(async(req,res,next)=>{
+    const startIndex = parseInt(req.query.startIndex) || 0
+    const sortDirection = (req.query.sortDirection === "asc" ? 1:-1)
+    const limit = parseInt(req.query.limit) || 9
+    const result = await User.find({
+        ...(req.query.userId && {_id: req.query.userId}),
+        ...(req.query.category && {category : req.query.category}),
+        ...(req.query.slug && {slug : req.query.slug}),
+        ...(req.query.searchTerm  && {
+            $or : [
+                { title : {$regex : req.query.title,$option : 'i'}},
+                { content : {$regex : req.query.title,$option : 'i'}}
+            ]
+        })
+    }).sort({updatedAt : sortDirection})
+    .skip(startIndex)
+    .limit(limit)
+    console.log(result)
+    const totalDoc = await User.countDocuments();
+    const now = new Date()
+    const date = new Date(
+        now.getFullYear(),
+        now.getMonth() - 1,
+        now.getDate()
+    )
+    const lastMonthDoc = await User.countDocuments({
+        createdAt : {$gte : date},
+    })
+    res.status(200).json({
+        result,
+        totalDoc,
+        lastMonthDoc
+    })
 })

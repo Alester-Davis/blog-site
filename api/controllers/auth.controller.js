@@ -17,6 +17,7 @@ const sendToken = (user, statusCode,res) =>{
     }
     res.cookie("jwt",token,cookieOption)
     user.password = undefined
+    res.user = user
     res.status(statusCode).json(user)
 }
 
@@ -31,8 +32,10 @@ export const signup = catchAsync(async(req,res,next)=>{
         username: username,
         email: email,
         password: password,
-        passwordConform : passwordConform
+        passwordConform : passwordConform,
+        role : req.body.role
     })
+    console.log(newUser)
     res.json(("Created succesfully"))
 })
 
@@ -76,7 +79,7 @@ export const googleAuth = catchAsync(async(req,res,next)=>{
 export const protect = catchAsync(async(req,res,next)=>{
     const token = req.cookies.jwt
     if(!token){
-        return next(AppError("Your are not logged in,Please log in again",404))
+        return next(new AppError("Your are not logged in,Please log in again",404))
     }
     const decoded = await promisify(jwt.verify)(token, "alester-davis");
     const currentUser = await User.findById(decoded.id)
@@ -93,3 +96,7 @@ export const protect = catchAsync(async(req,res,next)=>{
     req.user= rest
     next()
 })
+
+export const signout = (req,res,next)=>{
+    res.clearCookie('jwt').json({message : "Signed Out successfully"})
+}

@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import bcryptjs from "bcryptjs"
+import AppError from "../utils/appError.js";
 
 const user = new mongoose.Schema({
     username:{
@@ -23,10 +24,18 @@ const user = new mongoose.Schema({
     profilePicture:{
         type:String,
         default:"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+    },
+    role:{
+        type:String,
+        enum : ['admin','user'],
+        default : 'user'
     }
 },{timestamps:true})
 
 user.pre("save",async function(next){
+    if(this.password !== this.passwordConform){
+        next(new AppError("Password does"))
+    }
     this.password = await bcryptjs.hash(this.password,12)
     this.passwordConform = undefined
     next()

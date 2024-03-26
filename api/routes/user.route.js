@@ -1,11 +1,8 @@
 import express from "express"
-import { googleAuth, protect, signin, signup} from "../controllers/auth.controller.js"
-import { updateUser } from "../controllers/user.controller.js"
-const router = express.Router()
+import { protect } from "../controllers/auth.controller.js"
+import { getUsers } from "../controllers/user.controller.js"
+const Router = express.Router()
 
-router.post("/sign-up",signup)
-router.post("/sign-in",signin)
-router.post("/google",googleAuth)
-router.post("/update-user/:userid",protect,updateUser)
+Router.get('/get-user',protect,getUsers)
 
-export default router
+export default Router

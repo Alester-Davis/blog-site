@@ -8,6 +8,10 @@ import About from './pages/About.jsx'
 import Header from './components/Header.jsx'
 import { Footer } from 'flowbite-react'
 import FooterComp from './components/FooterComp.jsx'
+import OnlyAdminDashboard from './components/OnlyAdminDashboard.jsx'
+import CreatePost from './pages/CreatePost.jsx'
+import UpdatePost from './pages/UpdatePost.jsx'
+import PostPage from './pages/PostPage.jsx'
 export default function App() {
   return (
     <BrowserRouter>
@@ -19,6 +23,11 @@ export default function App() {
           <Route path='/project' element={<Project/>}/>
           <Route path='/dashboard' element={<Dashboard/>}/>
           <Route path='/about' element={<About/>}/>
+          <Route element={<OnlyAdminDashboard/>}>
+            <Route path='/create-post' element={<CreatePost/>}/>
+            <Route path='/update-post/:postId' element={<UpdatePost/>}/>
+          </Route>
+          <Route path='/post/:postSlug' element={<PostPage/>}></Route>
         </Routes>
     <FooterComp></FooterComp>
     </BrowserRouter>
