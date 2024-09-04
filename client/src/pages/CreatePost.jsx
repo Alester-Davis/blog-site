@@ -1,4 +1,5 @@
-import { Alert, Button, FileInput, Select, TextInput } from 'flowbite-react';
+import { Alert, FileInput} from 'flowbite-react';
+import { Input, SelectItem, Select, Button, Link } from '@nextui-org/react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import {
@@ -12,6 +13,8 @@ import { useState } from 'react';
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { useNavigate } from 'react-router-dom';
+import toast, { Toaster } from 'react-hot-toast';
+import { GoArrowLeft } from "react-icons/go";
 
 export default function CreatePost() {
   const [file, setFile] = useState(null);
@@ -26,6 +29,7 @@ export default function CreatePost() {
     try {
       if (!file) {
         setImageUploadError('Please select an image');
+        toast.error("Please select an image")
         return;
       }
       setImageUploadError(null);
@@ -42,6 +46,7 @@ export default function CreatePost() {
         },
         (error) => {
           setImageUploadError('Image upload failed');
+          toast.error("Image upload failed")
           setImageUploadProgress(null);
         },
         () => {
@@ -60,7 +65,9 @@ export default function CreatePost() {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("hello")
+    if(formData.title==null){
+      toast.error("Please give title to your blog")
+    }
     try {
       const res = await fetch('/api/post/create-post', {
         method: 'POST',
@@ -85,42 +92,63 @@ export default function CreatePost() {
   };
   return (
     <div className='p-3 max-w-3xl mx-auto min-h-screen'>
+      <div className='flex gap-3'>
+        <Link href='/dashboard?tab=post' className=''>
+          <GoArrowLeft  className='text-black mr-2'/> 
+          <p className='text-black font-semibold'>Back to post page</p>
+        </Link>
+      </div>
       <h1 className='text-center text-3xl my-7 font-semibold'>Create a post</h1>
       <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
         <div className='flex flex-col gap-4 sm:flex-row justify-between'>
-          <TextInput
+          <Input
             type='text'
             placeholder='Title'
-            required
             id='title'
-            className='flex-1'
             onChange={(e) =>
               setFormData({ ...formData, title: e.target.value })
             }
           />
-          <Select
+          <Select 
+            variant={"bordered"}
+            isRequired
+            defaultSelectedKeys={["uncategorized"]}
+            className="max-w-xs" 
             onChange={(e) =>
               setFormData({ ...formData, category: e.target.value })
             }
+          >
+            <SelectItem key={"uncategorized"} value='uncategorized'>
+              Select a category
+            </SelectItem>
+            <SelectItem key={"javascript"} value='javascript'>
+              JavaScript
+            </SelectItem>
+            <SelectItem key={"reactjs"} value='reactjs'>
+              React.js
+            </SelectItem>
+            <SelectItem key={"nextjs"} value='nextjs'>
+              Next.js
+            </SelectItem>
+          </Select>
+          {/* <Select
           >
             <option value='uncategorized'>Select a category</option>
             <option value='javascript'>JavaScript</option>
             <option value='reactjs'>React.js</option>
             <option value='nextjs'>Next.js</option>
-          </Select>
+          </Select> */}
         </div>
-        <div className='flex gap-4 items-center justify-between border-4 border-teal-500 border-dotted p-3'>
+        <div className='flex gap-4 items-center justify-between border-1 border-slate-500 p-3'>
           <FileInput
             type='file'
             accept='image/*'
             onChange={(e) => setFile(e.target.files[0])}
           />
           <Button
-            type='button'
-            gradientDuoTone='purpleToBlue'
-            size='sm'
-            outline
-            onClick={handleUpdloadImage}
+            variant="bordered"
+            color="default"
+            onPress={handleUpdloadImage}
             disabled={imageUploadProgress}
           >
             {imageUploadProgress ? (
@@ -135,7 +163,7 @@ export default function CreatePost() {
             )}
           </Button>
         </div>
-        {imageUploadError && <Alert color='failure'>{imageUploadError}</Alert>}
+        {/* {imageUploadError && <Alert color='failure'>{imageUploadError}</Alert>} */}
         {formData.image && (
           <img
             src={formData.image}
@@ -161,6 +189,7 @@ export default function CreatePost() {
           </Alert>
         )}
       </form>
+      <Toaster position='bottom-right'/>
     </div>
   );
 }

@@ -10,3 +10,87 @@
     -ms-overflow-style: none; 
     scrollbar-width: none; 
 }
+
+:root {
+  --bg-color: #fdfdfd;
+  --text-color: #333;
+  --main-color: #7e4ef9;
+  --white-color: #fdfdfd;
+  --shadow-color: rgba(0, 0, 0, .2);
+  --card-color: #fdfdfd;
+}
+
+.dark-mode {
+  --bg-color: #0b061f;
+  --text-color: #fdfdfd;
+  --shadow-color: rgba(0, 0, 0, .7);
+  --card-color: #2b187a;
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  padding: 2rem 7%;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  z-index: 100;
+  transition: .5s;
+}
+
+.header.sticky {
+  background: var(--bg-color);
+  box-shadow: 0 .1rem 1rem var(--shadow-color);
+}
+
+.logo {
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-right: auto;
+  color: var(--main-color);
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+}
+
+.nav-link {
+  font-size: 1.7rem;
+  position: relative;
+  color: var(--white-color);
+  font-weight: 500;
+  margin-right: 3.5rem;
+  text-decoration: none;
+}
+
+.nav-link.active {
+  color: var(--main-color);
+}
+
+.nav-link.active::before {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  width: 100%;
+  height: .2rem;
+  background: var(--main-color);
+}
+
+.theme-toggle {
+  font-size: 2.4rem;
+  color: var(--text-color);
+  cursor: pointer;
+}
+
+.header.sticky .theme-toggle {
+  color: var(--text-color);
+}
+
+.custom-input input:focus {
+  outline: none;
+  border: none; 
+  box-shadow: none;
+}

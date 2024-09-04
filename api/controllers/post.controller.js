@@ -23,7 +23,7 @@ export const createPost = catchAsync(async(req,res,next)=>{
 export const getPost = catchAsync(async(req,res,next)=>{
     const startIndex = parseInt(req.query.startIndex) || 0
     const sortDirection = (req.query.sortDirection === "asc" ? 1:-1)
-    const limit = parseInt(req.query.limit) || 9
+    const limit = parseInt(req.query.limit) || Infinity
     const result = await Post.find({
         ...(req.query.userId && {userId : req.query.userId}),
         ...(req.query.category && {category : req.query.category}),
@@ -31,8 +31,9 @@ export const getPost = catchAsync(async(req,res,next)=>{
         ...(req.query.postId && { _id : req.query.postId}),
         ...(req.query.searchTerm  && {
             $or : [
-                { title : {$regex : req.query.title,$option : 'i'}},
-                { content : {$regex : req.query.title,$option : 'i'}}
+                { title : {$regex : req.query.searchTerm,$options : 'i'}},
+                { content : {$regex : req.query.searchTerm,$options : 'i'}},
+                { category : {$regex : req.query.searchTerm,$options : 'i'}}
             ]
         })
     }).sort({updatedAt : sortDirection})
@@ -68,6 +69,9 @@ export const deletePost = catchAsync(async(req,res,next)=>{
 })
 
 export const updatePost = catchAsync(async(req,res,next)=>{
+    console.log(req.body.title)
+    console.log(req.body.content)
+    console.log(req.body.category)
     if(req.user.role !== "admin" ||  JSON.stringify(req.user._id) !== JSON.stringify(req.params.userId)){
         next(new AppError("Your are not allowed to delete the post",404))`1`
     }

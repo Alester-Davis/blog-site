@@ -13,7 +13,8 @@ const sendToken = (user, statusCode,res) =>{
     const token = signToken(user._id)
     console.log(token)
     const cookieOption = {
-        httpOnly:true
+        httpOnly:true,
+        maxAge: 1000 * 60 * 60 * 24 * 365
     }
     res.cookie("jwt",token,cookieOption)
     user.password = undefined
@@ -41,12 +42,13 @@ export const signup = catchAsync(async(req,res,next)=>{
 
 export const signin = catchAsync(async(req,res,next)=>{
     const {email,password} = req.body
+    console.log(email,password)
     if(!email || !password){
         next(new AppError("All fields are required",404))
     }
-    const user = await User.findOne({email}).select("+password")
+    const user = await User.findOne({email})
     if(!user){
-        next(new AppError("User doesn't exist",404))
+        return next(new AppError("User doesn't exist",404))
     }
     if(!(await user.correctPassword(user.password,password))){
         next(new AppError("Incorrect password",404))

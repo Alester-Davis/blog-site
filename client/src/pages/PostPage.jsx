@@ -1,8 +1,9 @@
-import { Button, Spinner } from 'flowbite-react';
+import { Spinner } from 'flowbite-react';
+import { Button } from '@nextui-org/react';
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import CommentSection from '../components/CommentSection';
-// import PostCard from '../components/PostCard';
+import PostCard from '../components/PostCard';
 
 export default function PostPage() {
   const { postSlug } = useParams();
@@ -41,8 +42,9 @@ export default function PostPage() {
       const fetchRecentPosts = async () => {
         const res = await fetch(`/api/post/get-post?limit=3`);
         const data = await res.json();
+        console.log(data)
         if (res.ok) {
-          setRecentPosts(data.posts);
+          setRecentPosts(data.result);
         }
       };
       fetchRecentPosts();
@@ -50,7 +52,9 @@ export default function PostPage() {
       console.log(error.message);
     }
   }, []);
-
+  useEffect(()=>{
+    console.log(recentPosts)
+  },[])
   if (loading)
     return (
       <div className='flex justify-center items-center min-h-screen'>
@@ -70,11 +74,11 @@ export default function PostPage() {
           {post && post.category}
         </Button>
       </Link>
-      <img
-        src={post && post.image}
-        alt={post && post.title}
-        className='mt-10 p-3 max-h-[500px] w-full object-cover'
-      />
+        <img
+          src={post && post.image}
+          alt={post && post.title}
+          className='mt-10 p-3 max-h-[500px] w-full object-cover'
+        />
       <div className='flex justify-between p-3 border-b border-slate-500 mx-auto w-full max-w-2xl text-xs'>
         <span>{post && new Date(post.createdAt).toLocaleDateString()}</span>
         <span className='italic'>
@@ -87,13 +91,13 @@ export default function PostPage() {
       ></div>
       <CommentSection postId={post._id} />
 
-      {/* <div className='flex flex-col justify-center items-center mb-5'>
-        <h1 className='text-xl mt-5'>Recent articles</h1>
-        <div className='flex flex-wrap gap-5 mt-5 justify-center'>
+      <div className='flex flex-col justify-center items-center mb-5'>
+        <h1 className='text-xl mt-5 font-semibold mb-7'>Recent articles</h1>
+        <div className='grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 w-[90vw] items-center justify-center'>
           {recentPosts &&
             recentPosts.map((post) => <PostCard key={post._id} post={post} />)}
         </div>
-      </div> */}
+      </div>
     </main>
   );
 }

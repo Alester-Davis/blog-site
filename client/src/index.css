@@ -1,3 +1,123 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+
+.timeline-item {
+    position: relative;
+    width: 40%;
+    padding: 10px 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.timeline-item:nth-child(odd) {
+    right:0%;
+    left:2%;
+}
+
+.timeline-item:nth-child(even) {
+    left: 49%;
+}
+
+.timeline-icon {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--main-color);
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.timeline-icon img {
+    width: 24px;
+    height: 24px;
+}
+
+
+
+
+@media (max-width: 640px) {
+    .timeline {
+        width: 100%;
+    }
+
+    .timeline::before {
+        display: none;
+    }
+
+    .timeline-item {
+        margin:2% 7%;
+        margin-left: 7%;
+        width: calc(100% - 40px);
+        left: 0px !important;
+    }
+    
+    .timeline-item:nth-child(even) {
+        margin-left: 4%;
+    }
+    .timeline-item:nth-child(odd) {
+        margin-left: 4%;
+    }
+
+    .timeline-icon {
+        left: 20px;
+        transform: translate(-50%, 0);
+    }
+}
+
+
+.skill .skill-content{
+    display: flex;
+    flex-direction: column;
+}
+
+.skill .skill-content .skill-part{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 5%;
+}
+
+
+.skill .skill-content .skill-part .skill-heading{
+    text-align: center;
+}
+
+nav .active {
+    font-weight:600;
+}
+
+nav header{
+    @apply max-w-full bg-white shadow-sm
+}
+
+textarea:focus,[type='text']:focus,[type='email']:focus,[type='number']:focus,[type='number']:focus {
+    --tw-ring-color : none !important;
+    border:none !important;
+    --tw-ring-shadow : none !important;
+}
+
+textarea,[type='text'],[type='email'],[type='number'],[type='password']  {
+    --tw-ring-color : none !important;
+    border:none !important;
+    --tw-ring-shadow : nonw !important;
+    background-color: transparent;
+}
+nav{
+    backdrop-filter: none !important;
+    background-color: transparent !important;
+
+}
+
+
