@@ -42,7 +42,11 @@ export default function Header() {
   const { currentUser } = useSelector((state) => state.user);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const menuItems = [{ name: "Dashboard", href: "/dashboard?tab=profile" },{name:"Blogs",href:"/post"}];
+  const menuItems = [
+    { name: "Dashboard", href: "/dashboard?tab=profile" },
+    { name: "Home", href: "/" },
+    { name: "Blogs", href: "/post" },
+  ];
 
   const closeModal = async (accept) => {
     if (accept === true) {
@@ -153,31 +157,28 @@ export default function Header() {
           )}
         </NavbarContent>
 
-        {currentUser && <NavbarMenu>
-          {menuItems.map((item, index) => (
-            <NavbarMenuItem key={`${item}-${index}`}>
-              <Link
-                color={
-                  index == 1
-                    ? "primary"
-                    : index === menuItems.length - 1
-                    ? "danger"
-                    : "foreground"
-                }
-                className="w-full text-blue-500"
-                to={`${item.href}`}
-                size="lg"
-              >
-                {item.name}
-              </Link>
-            </NavbarMenuItem>
-          ))}
-          <NavbarMenuItem key={`2`}>
-            <Link color="danger" className="w-full text-red-500" size="lg">
-              Log out
-            </Link>
-          </NavbarMenuItem>
-        </NavbarMenu>}
+        {currentUser && (
+          <NavbarMenu>
+            {menuItems.map((item, index) => (
+              <NavbarMenuItem key={`${item}-${index}`}>
+                <Link
+                  color={
+                    index == 1
+                      ? "primary"
+                      : index === menuItems.length - 1
+                      ? "danger"
+                      : "foreground"
+                  }
+                  className="w-full text-blue-500"
+                  to={`${item.href}`}
+                  size="lg"
+                >
+                  {item.name}
+                </Link>
+              </NavbarMenuItem>
+            ))}
+          </NavbarMenu>
+        )}
       </Navbar>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>

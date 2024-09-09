@@ -68,7 +68,7 @@ export default function Home() {
   return (
     <div className="w-full">
       <section className="flex justify-center items-center relative flex-col lg:flex-row h-[92vh] p-6 lg:p-20 w-[100%]">
-        <div className="flex flex-col text-center justify-center items-center lg:text-start lg:justify-start lg:items-start p-4 pr-10">
+        <div className="flex flex-col text-center justify-center items-center lg:text-start lg:justify-start lg:items-start p-4 lg:pr-10">
           <h3 className="text-3xl md:text-5xl font-bold">Hello, I am</h3>
           <h1 className="text-5xl md:text-7xl font-bold text-purple-500">
             Alester Davis E
@@ -90,12 +90,14 @@ export default function Home() {
               <FaTwitter className="w-8 h-8 text-purple-500" />
             </a>
           </div>
-          <Button
-            variant="bordered"
-            className="border-2 border-purple-500 text-purple-500 font-bold mt-5"
-          >
-            Download CV
-          </Button>
+          <a href="/Alester.pdf" download>
+            <Button
+              variant="bordered"
+              className="border-2 border-purple-500 text-purple-500 font-bold mt-5"
+            >
+              Download CV
+            </Button>
+          </a>
         </div>
         <div className="flex-shrink-0 w-36 h-36 md:h-52 md:w-52 lg:h-80 lg:w-80">
           <img
