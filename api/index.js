@@ -15,8 +15,7 @@ dotenv.config();
 const app = express();
 const __dirname = path.resolve();
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "../client/dist")));
-console.log(path.join(__dirname, "./client/dist"));
+app.use(express.static(path.join(__dirname, "/client/dist")));
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
@@ -32,6 +31,9 @@ app.use("/api/post", postRoute);
 app.use("/api/user", userRoute);
 app.use("/api/comment", commentRoute);
 app.use("/api/mail", mailRoute);
+app.get("*",(req,res)=>{
+    res.sendFile(path.join(__dirname,'client','dist','index.html'));
+})
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} in this server`, 404));
 });
