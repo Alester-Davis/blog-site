@@ -164,7 +164,7 @@ export default function Header() {
                     ? "danger"
                     : "foreground"
                 }
-                className="w-full"
+                className="w-full text-blue-500"
                 to={`${item.href}`}
                 size="lg"
               >
@@ -173,7 +173,7 @@ export default function Header() {
             </NavbarMenuItem>
           ))}
           <NavbarMenuItem key={`2`}>
-            <Link color={"danger"} className="w-full" size="lg">
+            <Link color="danger" className="w-full text-red-500" size="lg">
               Log out
             </Link>
           </NavbarMenuItem>
