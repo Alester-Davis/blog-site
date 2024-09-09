@@ -42,7 +42,7 @@ export default function Header() {
   const { currentUser } = useSelector((state) => state.user);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const menuItems = [{ name: "Dashboard", href: "/dashboard?tab=profile" }];
+  const menuItems = [{ name: "Dashboard", href: "/dashboard?tab=profile" },{name:"Blogs",href:"/post"}];
 
   const closeModal = async (accept) => {
     if (accept === true) {
@@ -123,9 +123,9 @@ export default function Header() {
                 {/* <DropdownItem key="project">
                   <Link to="/project">Projects</Link>
                 </DropdownItem> */}
-                <DropdownItem key="blogs">
+                {/* <DropdownItem key="blogs">
                   <Link to="/post">Blogs</Link>
-                </DropdownItem>
+                </DropdownItem> */}
                 {/* <Divider/> */}
                 <DropdownItem
                   key="logout"
