@@ -81,7 +81,7 @@ export default function Header() {
               Home
             </Link>
           </NavbarItem>
-          <NavbarItem className={isActive("/project") ? "active" : ""}>
+          {/* <NavbarItem className={isActive("/project") ? "active" : ""}>
             <Link
               to="/project"
               aria-current={isActive("/project") ? "page" : undefined}
@@ -89,7 +89,7 @@ export default function Header() {
             >
               Projects
             </Link>
-          </NavbarItem>
+          </NavbarItem> */}
           <NavbarItem className={isActive("/post") ? "active" : ""}>
             <Link
               to="/post"
@@ -119,6 +119,12 @@ export default function Header() {
                 </DropdownItem>
                 <DropdownItem key="dashboard">
                   <Link to="/dashboard?tab=profile">Dashboard</Link>
+                </DropdownItem>
+                {/* <DropdownItem key="project">
+                  <Link to="/project">Projects</Link>
+                </DropdownItem> */}
+                <DropdownItem key="blogs">
+                  <Link to="/post">Blogs</Link>
                 </DropdownItem>
                 {/* <Divider/> */}
                 <DropdownItem
