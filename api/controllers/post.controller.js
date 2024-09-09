@@ -40,7 +40,7 @@ export const getPost = catchAsync(async(req,res,next)=>{
     .skip(startIndex)
     .limit(limit)
     console.log(result)
-    const totalDoc = await Post.countDocuments();
+    const totalDoc = (!req.query.searchTerm)?await Post.countDocuments():result.length;
     const now = new Date()
     const date = new Date(
         now.getFullYear(),

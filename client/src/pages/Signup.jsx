@@ -1,6 +1,6 @@
-import { Link, useNavigate } from "react-router-dom";
-import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Input, Button, Spinner} from "@nextui-org/react";
 import { useSelector } from "react-redux";
 import GoogleButton from "../components/GoogleButton";
 
@@ -40,6 +40,11 @@ export default function Signup() {
         return setError("All fields are required");
       }
 
+      if (formData.password !== formData.passwordConform) {
+        setLoading(false);
+        return setError("Passwords do not match");
+      }
+
       const res = await fetch("/api/auth/sign-up", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -67,56 +72,49 @@ export default function Signup() {
           <Link to="/" className="font-bold text-4xl">
             <h1>ALESTER</h1>
           </Link>
-          <p className="mt-5 text-sm">
-            This is a demo project. You can sign up with email and password or
-            with Google.
-          </p>
+          <h1 className="mt-5">
+            Explore the work of Alester Davis, a passionate fullstack developer
+            committed to crafting dynamic, user-friendly web experiences. Dive
+            into my projects, where creativity meets code, and read my blog for
+            tips, tutorials, and the latest trends in web development. Join me
+            on this exciting journey of continuous learning and innovation!
+          </h1>
         </div>
         <div className="flex mt-5 flex-col justify-center min-w-[100%] md:min-w-[50%] px-10">
           <form className="flex flex-col gap-4" onSubmit={formHandle}>
-            <div>
-              <Label value="Your username" />
-              <TextInput
-                type="text"
-                placeholder="Username"
-                id="username"
-                onChange={changeHandler}
-              />
-            </div>
-            <div>
-              <Label value="Your email" />
-              <TextInput
-                type="email"
-                placeholder="Email"
-                id="email"
-                onChange={changeHandler}
-              />
-            </div>
-            <div>
-              <Label value="Your password" />
-              <TextInput
-                type="password"
-                placeholder="Password"
-                id="password"
-                onChange={changeHandler}
-              />
-            </div>
-            <div>
-              <Label value="Confirm password" />
-              <TextInput
-                type="password"
-                placeholder="Confirm Password"
-                id="passwordConform"
-                onChange={changeHandler}
-              />
-            </div>
-            <Button
-              gradientDuoTone="purpleToPink"
-              type="submit"
-              onClick={formHandle}
-              disabled={loading}
+            <Input
+              type="text"
+              placeholder="Username"
+              id="username"
+              onChange={changeHandler}
+              variant="bordered"
               fullWidth
-            >
+            />
+            <Input
+              type="email"
+              placeholder="Email"
+              id="email"
+              onChange={changeHandler}
+              variant="bordered"
+              fullWidth
+            />
+            <Input
+              type="password"
+              placeholder="Password"
+              id="password"
+              onChange={changeHandler}
+              variant="bordered"
+              fullWidth
+            />
+            <Input
+              type="password"
+              placeholder="Confirm Password"
+              id="passwordConform"
+              onChange={changeHandler}
+              variant="bordered"
+              fullWidth
+            />
+            <Button color="primary" type="submit" disabled={loading} fullWidth>
               {loading ? (
                 <>
                   <Spinner size="sm" />
@@ -134,7 +132,7 @@ export default function Signup() {
               Sign in
             </Link>
           </div>
-          {error && <Alert className="mt-5" color="failure">{error}</Alert>}
+          {/* {error && <Alert type="error" className="mt-5">{error}</Alert>} */}
         </div>
       </div>
     </div>

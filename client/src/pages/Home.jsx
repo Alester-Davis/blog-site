@@ -245,10 +245,10 @@ export default function Home() {
           </Button>
         </form>
       </section>
-      <footer className="">
+      <footer className="w-full h-16 text-center bg-purple-600 flex justify-center items-center">
         <div className="footer-text">
-          <p>
-            Copyrights &copy; 2024 by Alester Davis E | All Rights Reserved.
+          <p className="text-white text-sm">
+            Copyrights &copy; 2024 by Alester Davis E.
           </p>
         </div>
         <div className="footer-topup">

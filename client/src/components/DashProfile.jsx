@@ -9,6 +9,7 @@ import {
   ModalContent,
   ModalHeader,
   ModalBody,
+  useDisclosure,
 } from "@nextui-org/react";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,16 +17,20 @@ import { getStorage } from "firebase/storage";
 import { app } from "../../firebase";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import {
+  signoutSuccess,
   updateFailure,
   updateStart,
   updateSuccess,
 } from "../redux/user/userSlice";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
+import { HiOutlineExclamationCircle } from "react-icons/hi";
 
 export default function DashProfile() {
   const { currentUser, loading, error } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [formData, setFormData] = useState({});
   const [imageFile, setImageFile] = useState(null);
   const [imageFileProgress, setImageFileProgress] = useState(null);
@@ -34,7 +39,7 @@ export default function DashProfile() {
   const [success, setSuccess] = useState(null);
   const imagePicker = useRef();
   console.log(imageFileProgress, imageFileError);
-    useEffect(() => {
+  useEffect(() => {
     if (currentUser) {
       setFormData({
         username: currentUser.username,
@@ -99,21 +104,21 @@ export default function DashProfile() {
       const resData = await res.json();
       console.log(resData._doc);
       if (!res.ok) {
-        toast.error("Error")
+        toast.error("Error");
         toast((t) => (
-            <span className="flex flex-col">
-              <b>{resData.message}</b>
-              <Button variant="bordered" onClick={() => toast.dismiss(t.id)}>
-                Dismiss 
-              </Button>
-            </span>
-          ));
+          <span className="flex flex-col">
+            <b>{resData.message}</b>
+            <Button variant="bordered" onClick={() => toast.dismiss(t.id)}>
+              Dismiss
+            </Button>
+          </span>
+        ));
         return dispatch(updateFailure(resData.message));
       }
       dispatch(updateSuccess(resData._doc));
       setImageFileProgress(null);
       setSuccess("Updated successfully..");
-      toast.success("Updated successfully")
+      toast.success("Updated successfully");
     } catch (error) {
       console.log(error);
       dispatch(updateFailure(error));
@@ -125,7 +130,17 @@ export default function DashProfile() {
       return { ...prev, [e.target.id]: e.target.value };
     });
   };
-
+  const closeModal = async(accept) => {
+    if (accept === true) {
+      const res = await fetch(`/api/auth/delete-user/${currentUser._id}`);
+      const resData = await res.json();
+      if (res.ok) {
+        dispatch(signoutSuccess());
+        navigate("/sign-in");
+      }
+    }
+    onOpenChange(false);
+  };
   return (
     <div className="max-w-lg mx-auto w-full mb-32 p-7">
       <div
@@ -151,10 +166,10 @@ export default function DashProfile() {
                 // label={`${imageFileProgress}%`}
                 color="primary"
                 classNames={{
-                    svg: "w-full h-full drop-shadow-md",
-                    indicator: "stroke-blue-500",
-                    track: "stroke-white",
-                    value: "text-3xl font-semibold text-white",
+                  svg: "w-full h-full drop-shadow-md",
+                  indicator: "stroke-blue-500",
+                  track: "stroke-white",
+                  value: "text-3xl font-semibold text-white",
                 }}
                 style={{
                   position: "absolute",
@@ -185,7 +200,12 @@ export default function DashProfile() {
             onChange={changeHandle}
             placeholder="Email"
           />
-          <Button onClick={clickHandle} disabled={loading} variant="bordered" className="border-2 border-black text-white font-bold bg-slate-800">
+          <Button
+            onClick={clickHandle}
+            disabled={loading}
+            variant="bordered"
+            className="border-2 border-black text-white font-bold bg-slate-800"
+          >
             {loading ? (
               <>
                 <Spinner size="sm" />
@@ -214,11 +234,47 @@ export default function DashProfile() {
         </form> */}
         <form className="flex flex-col gap-4">
           <p className="text-sm">Do you want to delete your account ?</p>
-          <Button variant="bordered" className="border-2 border-red-500 text-red-500 font-bold">Delete Account</Button>
+          <Button
+            variant="bordered"
+            className="border-2 border-red-500 text-red-500 font-bold"
+            onPress={onOpen}
+          >
+            Delete Account
+          </Button>
         </form>
       </div>
-      <div><Toaster position="bottom-right"/></div>
-
+      <div>
+        <Toaster position="bottom-right" />
+      </div>
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">
+                Delete your account
+              </ModalHeader>
+              <ModalBody>
+                <div className="text-center">
+                  <HiOutlineExclamationCircle className="h-14 w-14 text-gray-400 mb-4 mx-auto" />
+                  <p>Are you sure you want to delete your account?</p>
+                </div>
+              </ModalBody>
+              <ModalFooter>
+                <Button
+                  color="primary"
+                  variant="light"
+                  onPress={() => onOpenChange(false)}
+                >
+                  Close
+                </Button>
+                <Button color="danger" onPress={() => closeModal(true)}>
+                  Delete
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </div>
   );
 }

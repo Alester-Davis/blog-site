@@ -36,6 +36,7 @@ export default function DisplayPost() {
         `/api/post/get-post?startIndex=${(page - 1) * postsPerPage}&limit=${postsPerPage}${search ? `&searchTerm=${search}` : ""}`
       );
       const data = await result.json();
+      console.log(data)
       if (result.ok) {
         setPosts(data.result);
         setTotalPost(data.totalDoc);

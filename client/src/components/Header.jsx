@@ -117,8 +117,8 @@ export default function Header() {
                   <p className="font-semibold">Signed in as</p>
                   <p className="font-semibold">{currentUser.email}</p>
                 </DropdownItem>
-                <DropdownItem key="profile">
-                  <Link to="/dashboard?tab=profile">Profile</Link>
+                <DropdownItem key="dashboard">
+                  <Link to="/dashboard?tab=profile">Dashboard</Link>
                 </DropdownItem>
                 {/* <Divider/> */}
                 <DropdownItem
