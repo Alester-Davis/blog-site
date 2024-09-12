@@ -9,7 +9,6 @@ import { NextUIProvider } from "@nextui-org/react";
 import ThemeProvider from "./components/ThemeProvider.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
     <NextUIProvider>
       <PersistGate persistor={persistor}>
         <Provider store={store}>
@@ -19,5 +18,4 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         </Provider>
       </PersistGate>
     </NextUIProvider>
-  </React.StrictMode>
 );

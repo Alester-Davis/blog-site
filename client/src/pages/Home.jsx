@@ -1,7 +1,8 @@
 import { Button, Input, Textarea } from "@nextui-org/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
+import { useLocation } from "react-router-dom";
 
 export default function Home() {
   const [formData, setFormData] = useState({
@@ -11,6 +12,13 @@ export default function Home() {
     emailSubject: "",
     content: "",
   });
+  const location = useLocation();
+  useEffect(() => {
+    console.log(location.state?.successMessage)
+    if (location.state?.successMessage) {
+      toast.success("Signed in successfully.");
+    }
+  }, [location.state]);
   const validateEmail = (email) => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     console.log(regex.test(email));

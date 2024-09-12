@@ -45,6 +45,7 @@ export const updateUser = catchAsync(async (req, res, next) => {
 
 export const deleteUser = async (req, res, next) => {
   const userId = req.params.userId;
+  console.log(userId)
   const result = await User.findByIdAndDelete(userId);
   const commentDelete = await Comment.deleteMany({ userId });
   console.log("helo");

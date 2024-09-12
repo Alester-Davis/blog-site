@@ -91,7 +91,6 @@ export default function DashProfile() {
   const clickHandle = async (e) => {
     e.preventDefault();
     if (Object.keys(formData).length === 0) {
-      console.log("hello");
       return;
     }
     try {
@@ -132,7 +131,9 @@ export default function DashProfile() {
   };
   const closeModal = async(accept) => {
     if (accept === true) {
-      const res = await fetch(`/api/auth/delete-user/${currentUser._id}`);
+      const res = await fetch(`/api/auth/delete-user/${currentUser._id}`,{
+        method:"DELETE"
+      });
       const resData = await res.json();
       if (res.ok) {
         dispatch(signoutSuccess());

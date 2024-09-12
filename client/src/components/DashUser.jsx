@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Table, TableHeader, TableBody, TableColumn, TableRow, TableCell } from '@nextui-org/table';
-import { Button, Modal, Spinner} from '@nextui-org/react';
+import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Spinner, useDisclosure} from '@nextui-org/react';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import { useSelector } from 'react-redux';
 
 export default function DashUser() {
   const { currentUser } = useSelector((state) => state.user);
   const [user, setUser] = useState([]);
-  const [showMore, setShowMore] = useState(true);
-  const [showModal, setShowModal] = useState(false);
+  const { isOpen, onOpen, onClose,onOpenChange } = useDisclosure();
   const [deleteUserId, setDeleteUserId] = useState(null);
   const [loading,setLoading] = useState(false);
   useEffect(() => {
@@ -18,9 +17,6 @@ export default function DashUser() {
         const res = await fetch(`/api/user/get-user`);
         const result = await res.json();
         setUser(result.result);
-        if (result.result.length < 9) {
-          setShowMore(false);
-        }
       } catch (error) {
         console.log(error);
       }
@@ -28,10 +24,12 @@ export default function DashUser() {
     };
     fetchPost();
   }, [currentUser._id]);
-
+  const openDeleteModal = (userId) => {
+    setDeleteUserId(userId);
+    onOpen();
+  };
   const handleDeleteUser = async (e) => {
-    e.preventDefault();
-    try {
+    try{
       const res = await fetch(`/api/auth/delete-user/${deleteUserId}`, {
         method: 'DELETE',
       });
@@ -41,36 +39,19 @@ export default function DashUser() {
       }
       if (res.ok) {
         setUser((prev) => prev.filter((user1) => user1._id !== deleteUserId));
-        setShowModal(false);
-        if (user.length < 9) {
-          setShowMore(false);
-        }
       }
     } catch (error) {
       console.log(error);
     }
+    onClose();
   };
 
-  const showMoreHandle = async () => {
-    try {
-      const res = await fetch(`/api/user/get-user?startIndex=${user.length}`);
-      const result = await res.json();
-      if (res.ok) {
-        setUser((prev) => [...prev, ...result.result]);
-        if (result.result.length < 9) {
-          setShowMore(false);
-        }
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  if(loading){
-    return(
-      <div className='w-full p-3 flex justify-center'>
-         <Spinner color="primary" labelColor="primary"/>
+  if (loading) {
+    return (
+      <div className="w-full h-full p-3 flex justify-center items-center">
+        <Spinner color="primary" labelColor="primary" />
       </div>
-    )
+    );
   }
   return (
     <div className='w-full p-3 flex justify-center'>
@@ -105,10 +86,7 @@ export default function DashUser() {
                         auto
                         flat
                         className='text-danger bg-transparent'
-                        onClick={() => {
-                          setShowModal(true);
-                          setDeleteUserId(user._id);
-                        }}
+                        onPress={() => openDeleteModal(user._id)}
                       >
                         Delete
                       </Button>
@@ -118,47 +96,39 @@ export default function DashUser() {
               ))}
             </TableBody>
           </Table>
-          {showMore && (
-            <Button
-              auto
-              flat
-              color='primary'
-              onClick={showMoreHandle}
-              css={{ marginTop: '20px', width: '100%' }}
-            >
-              Show More
-            </Button>
-          )}
         </>
       ) : (
         <p>No users yet!</p>
       )}
-      <Modal
-        closeButton
-        aria-labelledby="modal-title"
-        open={showModal}
-        onClose={() => setShowModal(false)}
-      >
-        {/* <Modal.Header>
-          <Text id="modal-title" size={18}>
-            Confirm Deletion
-          </Text>
-        </Modal.Header>
-        <Modal.Body>
-          <div className='text-center'>
-            <HiOutlineExclamationCircle className='h-14 w-14 text-gray-400 mb-4 mx-auto' />
-            <Text>Are you sure you want to delete the user?</Text>
-          </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button auto flat color='error' onClick={handleDeleteUser}>
-            Yes, I'm sure
-          </Button>
-          <Button auto flat color='secondary' onClick={() => setShowModal(false)}>
-            No, cancel
-          </Button>
-        </Modal.Footer> */}
-      </Modal>
+      <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalContent>
+            {(onClose) => (
+              <>
+                <ModalHeader className="flex flex-col gap-1">
+                  Confirm Deletion
+                </ModalHeader>
+                <ModalBody>
+                  <div className="text-center">
+                    <HiOutlineExclamationCircle className="h-14 w-14 text-gray-400 mb-4 mx-auto" />
+                    <p>Are you sure you want to delete the user?</p>
+                  </div>
+                </ModalBody>
+                <ModalFooter>
+                  <Button
+                    color="danger"
+                    variant="light"
+                    onPress={handleDeleteUser}
+                  >
+                    Yes, I'm sure
+                  </Button>
+                  <Button color="primary" onPress={onClose}>
+                    No, cancel 
+                  </Button>
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
     </div>
   );
 }

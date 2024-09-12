@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { Input, Button, Spinner} from "@nextui-org/react";
 import { useSelector } from "react-redux";
 import GoogleButton from "../components/GoogleButton";
+import toast, { Toaster } from "react-hot-toast";
+import { Alert } from "flowbite-react";
 
 export default function Signup() {
   const [formData, setFormData] = useState({});
@@ -39,7 +41,10 @@ export default function Signup() {
         setLoading(false);
         return setError("All fields are required");
       }
-
+      if(formData.username.length<7||formData.username.length>20){
+        setLoading(false);
+        return setError("Username length should be between 7 and 20");
+      }
       if (formData.password !== formData.passwordConform) {
         setLoading(false);
         return setError("Passwords do not match");
@@ -57,7 +62,7 @@ export default function Signup() {
       if (!res.ok) {
         setError(resData.message);
       } else {
-        navigate("/sign-in");
+        return navigate("/sign-in", { state: { successMessage: "Signed up successfully" } });
       }
     } catch (e) {
       setError(e.message);
@@ -132,9 +137,10 @@ export default function Signup() {
               Sign in
             </Link>
           </div>
-          {/* {error && <Alert type="error" className="mt-5">{error}</Alert>} */}
+          {error && <Alert color="failure" className="mt-5">{error}</Alert>}
         </div>
       </div>
+      {/* <Toaster position="bottom-right" reverseOrder={false} /> */}
     </div>
   );
 }
