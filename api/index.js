@@ -33,9 +33,9 @@ app.use("/api/user", userRoute);
 app.use("/api/comment", commentRoute);
 app.use("/api/work",workRoute);
 app.use("/api/mail", mailRoute);
-// app.get("*",(req,res)=>{
-//     res.sendFile(path.join(__dirname,'client','dist','index.html'));
-// })
+app.get("*",(req,res)=>{
+    res.sendFile(path.join(__dirname,'client','dist','index.html'));
+})
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} in this server`, 404));
 });
