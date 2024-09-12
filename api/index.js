@@ -8,6 +8,7 @@ import postRoute from "./routes/post.route.js";
 import userRoute from "./routes/user.route.js";
 import commentRoute from "./routes/comment.route.js";
 import mailRoute from "./routes/mail.route.js";
+import workRoute from "./routes/work.route.js";
 import { globalErrorHandler } from "./controllers/error.controller.js";
 import cookieParser from "cookie-parser";
 import path from "path";
@@ -30,10 +31,11 @@ app.use("/api/auth", authRoute);
 app.use("/api/post", postRoute);
 app.use("/api/user", userRoute);
 app.use("/api/comment", commentRoute);
+app.use("/api/work",workRoute);
 app.use("/api/mail", mailRoute);
-app.get("*",(req,res)=>{
-    res.sendFile(path.join(__dirname,'client','dist','index.html'));
-})
+// app.get("*",(req,res)=>{
+//     res.sendFile(path.join(__dirname,'client','dist','index.html'));
+// })
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} in this server`, 404));
 });
