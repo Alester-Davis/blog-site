@@ -102,7 +102,7 @@ export default function DashPost() {
                       {new Date(post.updatedAt).toLocaleDateString()}
                     </TableCell>
                     <TableCell>
-                      <Link href={`/post/${post.slug}`}>
+                      <Link to={`/post/${post.slug}`}>
                         <img
                           src={post.image}
                           className="w-20 h-10 object-contain"
@@ -111,12 +111,12 @@ export default function DashPost() {
                       </Link>
                     </TableCell>
                     <TableCell>
-                      <Link href={`/post/${post.slug}`} color="foreground">
+                      <Link to={`/post/${post.slug}`} color="foreground">
                         {post.title}
                       </Link>
                     </TableCell>
                     <TableCell>
-                      <Link href={`/post/${post.slug}`} color="foreground">
+                      <Link to={`/post/${post.slug}`} color="foreground">
                         {post.category}
                       </Link>
                     </TableCell>
@@ -134,7 +134,7 @@ export default function DashPost() {
                       </Button>
                     </TableCell>
                     <TableCell>
-                      <Link href={`/update-post/${post._id}`}>
+                      <Link to={`/update-post/${post._id}`}>
                         <span className="font-medium text-amber-300 hover:none cursor-pointer">
                           Edit
                         </span>

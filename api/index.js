@@ -11,16 +11,18 @@ import mailRoute from "./routes/mail.route.js";
 import workRoute from "./routes/work.route.js";
 import { globalErrorHandler } from "./controllers/error.controller.js";
 import cookieParser from "cookie-parser";
+import morgan from "morgan";
 import path from "path";
 dotenv.config();
 const app = express();
 const __dirname = path.resolve();
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "/client/dist")));
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
-
+app.use(morgan('dev'));
 mongoose
   .connect(
     "mongodb+srv://alesterkvp:123Alester123@cluster0.wj0paf7.mongodb.net/mern-blog"
@@ -40,6 +42,6 @@ app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} in this server`, 404));
 });
 app.use(globalErrorHandler);
-app.listen(4000, () => {
-  console.log(`listening to port ${4000}`);
+app.listen(8000, () => {
+  console.log(`listening to port ${8000}`);
 });
